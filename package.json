@@ -1,7 +1,7 @@
 {
-  "name": "react-native-scroll-menu",
-  "version": "1.1.2",
-  "description": "React native scrolling menu",
+  "name": "@sekizlipenguen/react-native-scroll-menu",
+  "version": "1.8.0",
+  "description": "A customizable and easy-to-use horizontal scrolling menu for React Native.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "typings": "lib/index.d.ts",
@@ -18,17 +18,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sekizlipenguen/react-native-scrolling-menu.git"
+    "url": "git+https://github.com/sekizlipenguen/react-native-scroll-menu.git"
   },
   "keywords": [
-    "scrolling menu horizontal",
-    "react",
     "react-native",
-    "scrolling",
-    "button",
-    "menu",
-    "horizontal",
-    "react native scroll menu"
+    "scroll menu",
+    "horizontal menu",
+    "react native menu",
+    "react native horizontal menu",
+    "scrolling menu",
+    "button menu",
+    "react native components"
   ],
   "author": "SekizliPenguen",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "react-native": "^0.61.5"
   },
   "bugs": {
-    "url": "https://github.com/sekizlipenguen/react-native-scrolling-menu/issues"
+    "url": "https://github.com/sekizlipenguen/react-native-scroll-menu/issues"
   },
-  "homepage": "https://github.com/sekizlipenguen/react-native-scrolling-menu#readme"
+  "homepage": "https://github.com/sekizlipenguen/react-native-scroll-menu#readme"
 }
