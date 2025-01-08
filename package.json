@@ -12,11 +12,6 @@
     "build": "babel src --out-dir lib --extensions '.js,.jsx,.ts,.tsx'",
     "prepare": "npm run build"
   },
-  "files": [
-    "lib",
-    "README.md",
-    "LICENSE"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/sekizlipenguen/react-native-scroll-menu.git"
