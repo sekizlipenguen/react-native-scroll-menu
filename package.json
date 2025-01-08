@@ -4,14 +4,6 @@
   "description": "A customizable and easy-to-use horizontal scrolling menu for React Native.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "scripts": {
-    "start": "react-native start",
-    "test": "npm run lint && npm run test:unit",
-    "test:unit": "jest",
-    "lint": "eslint './src/**/*.{js,ts,tsx}'",
-    "build": "babel src --out-dir lib --extensions '.js,.jsx,.ts,.tsx'",
-    "prepare": "npm run build"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/sekizlipenguen/react-native-scroll-menu.git"
