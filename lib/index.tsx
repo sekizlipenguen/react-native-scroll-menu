@@ -8,12 +8,13 @@ declare module "react-native-scroll-menu" {
 
   export type NavigationTabsProps = {
     id: string;
-    name: string;
+    name?: string;
+    component?: React.ReactNode;
+    onPress?: (route: routeProps) => void;
   };
 
   type ScrollingButtonMenuProps = {
     items: Array<NavigationTabsProps>;
-    onPress: (route: routeProps) => void;
     upperCase?: boolean;
     textStyle?: StyleProp<TextStyle>;
     activeTextStyle?: StyleProp<TextStyle>;

@@ -1,6 +1,6 @@
 {
   "name": "@sekizlipenguen/react-native-scroll-menu",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "A customizable and easy-to-use horizontal scrolling menu for React Native.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
