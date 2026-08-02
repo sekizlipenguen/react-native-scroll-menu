@@ -4,211 +4,259 @@
 
 # @sekizlipenguen/react-native-scroll-menu
 
-A lightweight and customizable horizontal scrolling menu component for React Native. Designed for simplicity and flexibility, this package helps you create smooth and interactive menus for your mobile applications.
+Modern horizontal scrolling menu for React Native.
 
-**Note:** This package is now part of the `@sekizlipenguen` scope to improve maintainability and provide better support for future updates.
+Plain React source + TypeScript definitions. Auto-centers the active chip, supports custom items, indicators, and optional tab scenes with swipe + fade/scale effects.
+
+---
+
+## Demo
+
+| Tab scenes (swipe + content) | Chips / autoCenter / indicator |
+|:----------------------------:|:------------------------------:|
+| ![](assets/1.gif) | ![](assets/2.gif) |
+
+Recorded from the iOS Simulator playground (`example/`).
 
 ---
 
 ## Installation
 
-Install the package using npm or yarn:
-
 ```bash
 npm install @sekizlipenguen/react-native-scroll-menu
-```
-
-```bash
+# or
 yarn add @sekizlipenguen/react-native-scroll-menu
 ```
 
----
+Peer deps: `react`, `react-native` (>= 0.64).
 
-## Example
+### Local playground
 
-|                           Example                           |
-|:----------------------------------------------------------:|
-| ![](assets/1.gif)                                          |
-| ![](assets/2.gif)                                          |
-
----
-
-## Usage
-
-Here’s a simple example of how to use the `@sekizlipenguen/react-native-scroll-menu`:
-
-### Class Component Example
-
-```javascript
-import React, { Component } from 'react';
-import { View } from 'react-native';
-
-// Import the component
-import ScrollingButtonMenu from '@sekizlipenguen/react-native-scroll-menu';
-
-export default class Example extends Component {
-  render() {
-    return (
-        <ScrollingButtonMenu
-            items={[
-              {id: "1", name: 'Life'},
-              {id: "2", name: 'Time'},
-              {id: "3", name: 'Faith'},
-              {id: "4", name: 'Cosmos'},
-              {id: "5", name: 'Fall'},
-            ]}
-            onPress={(e) => console.log(e)}
-            selected={"1"}
-        />
-    );
-  }
-}
+```bash
+cd example
+npm install
+bundle install && bundle exec pod install --project-directory=ios
+npm start -- --port 8083
+npx react-native run-ios --port 8083
 ```
 
-### Functional Component with Hook Example
+`example/` is in git for development — **not published to npm**.
 
-```javascript
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+---
 
-// Import the component
+## Quick start
+
+```jsx
+import React, {useState} from 'react';
+import {Text, View} from 'react-native';
 import ScrollingButtonMenu from '@sekizlipenguen/react-native-scroll-menu';
 
-const ExampleWithHook = () => {
-  const [selectedItem, setSelectedItem] = useState("1");
-
-  const handlePress = (item) => {
-    console.log(item);
-    setSelectedItem(item.id);
-  };
+export default function Example() {
+  const [selected, setSelected] = useState('1');
 
   return (
-      <View>
-        <ScrollingButtonMenu
-            items={[
-              {id: "1", name: 'Life'},
-              {id: "2", name: 'Time'},
-              {id: "3", name: 'Faith'},
-              {id: "4", name: 'Cosmos'},
-              {id: "5", name: 'Fall'},
-            ]}
-            onPress={handlePress}
-            selected={selectedItem}
-        />
-        <Text>Selected Item: {selectedItem}</Text>
-      </View>
+    <View>
+      <ScrollingButtonMenu
+        items={[
+          {id: '1', name: 'Life'},
+          {id: '2', name: 'Time'},
+          {id: '3', name: 'Faith'},
+          {id: '4', name: 'Cosmos'},
+          {id: '5', name: 'Fall'},
+        ]}
+        selected={selected}
+        onPress={(item) => setSelected(item.id)}
+      />
+      <Text>Selected: {selected}</Text>
+    </View>
   );
-};
-
-export default ExampleWithHook;
-```
-
-### Using Custom Components and Images in Items
-
-You can now use custom React components (e.g. images, icons, or any JSX) instead of just plain text labels.  
-To do this, use the `component` property instead of `name`:
-
-```jsx
-items = {
-  [
-      {id: "1", name: 'Life'},
-{
-  id: "2",
-      component
-:
-  (
-      <View style={{alignItems: 'center'}}>
-        <Image source={require('./icon.png')} style={{width: 24, height: 24}}/>
-        <Text style={{fontSize: 12, marginTop: 4}}>Icon</Text>
-      </View>
-  ),
-}
-,
-{
-  id: "3", name
-:
-  'Faith'
-}
-,
-]
 }
 ```
 
-> You can combine images with labels using any layout (e.g. `View`, `Text`, etc.) to create richer item content.
+---
 
-If the `component` field is present, the `name` field will be ignored and only the custom component will be rendered.
+## Tab menu + content scenes
 
-### Per-Item `onPress` Function
-
-You can define a custom `onPress` function for each item individually. If provided, it will override the global `onPress` for that specific item.
+Instagram / App Store style: chips on top, a page underneath.
 
 ```jsx
-items = {
-  [
-      {id: "1", name: 'Home'},
-{
-  id: "2",
-      name
-:
-  'Profile',
-      onPress
-:
-  () => {
-    console.log("Profile pressed!");
-  },
-}
-,
-{
-  id: "3", name
-:
-  'Settings'
-}
-,
-]
-}
-```
+import {ScrollingTabScenes} from '@sekizlipenguen/react-native-scroll-menu';
 
-> If `onPress` is provided on an item, it will be executed instead of the global `onPress` passed to the component.
-
-### Optional Button Style (No Default)
-
-If you want full control over styling and don't want the default button style, you can omit it by passing an empty `buttonStyle`:
-
-```jsx
-<ScrollingButtonMenu
-    items={...}
-    buttonStyle={{}} // no default style will be applied
+<ScrollingTabScenes
+  items={[
+    {id: 'overview', name: 'Overview'},
+    {id: 'gallery', name: 'Gallery'},
+    {id: 'reviews', name: 'Reviews'},
+  ]}
+  selected={selected}
+  onChange={(item) => setSelected(item.id)}
+  animation="slide" // 'slide' | 'fade' | 'scale'
+  swipeEnabled
+  indicator
+  renderScene={({item}) => <YourPage id={item.id} />}
 />
 ```
 
-When `buttonStyle` is set, the default internal style will not be applied. This allows full customization from the outside.
+- Height is **automatic** (measures active scene). Pass `height` only for a fixed viewport.
+- `slide` = pager + parallax fade/scale  
+- `fade` / `scale` = cross-fade transitions  
+- Menu props (`gap`, `indicator`, styles, …) are forwarded to `ScrollingButtonMenu`.
+
+Heavier alternatives if you need Material TabView / collapsing headers:  
+[react-native-tab-view](https://reactnavigation.org/docs/tab-view/) · [reanimated-tab-view](https://github.com/adithyavis/reanimated-tab-view) · [collapsible-fluid-tabs](https://github.com/rileysay/react-native-collapsible-fluid-tabs)
 
 ---
 
-## Props
+## More examples
 
-| Key                         | Type             | Description                                           |
-|-----------------------------|------------------|-------------------------------------------------------|
-| `items`                     | Array            | Array for button menu (required).                     |
-| `onPress`                   | Function(menu)   | Function triggered on button press (required).        |
-| `upperCase`                 | Boolean          | Convert text to uppercase. Default: `false`.          |
-| `selectedOpacity`           | Number           | Opacity when button is pressed. Default: `0.7`.       |
-| `containerStyle`            | Object           | Style for the container.                              |
-| `contentContainerStyle`     | Object           | Style for the content container.                      |
-| `scrollStyle`               | Object           | Style for the scroll view.                            |
-| `textStyle`                 | Object           | Style for the text.                                   |
-| `buttonStyle`               | Object           | Style for the button.                                 |
-| `activeButtonStyle`         | Object           | Style for the active button.                          |
-| `firstButtonStyle`          | Object           | Style for the first button.                           |
-| `lastButtonStyle`           | Object           | Style for the last button.                            |
-| `activeTextStyle`           | Object           | Style for the active text.                            |
-| `activeColor`               | String           | Active button text color. Default: `"#ffffff"`.       |
-| `activeBackgroundColor`     | String           | Active button background color. Default: `"#ffffff"`. |
-| `selected`                  | String or Number | Selected item id. Default: `1`.                       |
-| `keyboardShouldPersistTaps` | String           | Default: `"always"`.                                  |
+### Custom component item
+
+```jsx
+items={[
+  {id: '1', name: 'Life'},
+  {
+    id: '2',
+    component: (
+      <View style={{alignItems: 'center'}}>
+        <Image source={require('./icon.png')} style={{width: 24, height: 24}} />
+        <Text style={{fontSize: 12, marginTop: 4}}>Icon</Text>
+      </View>
+    ),
+  },
+]}
+```
+
+If `component` is set, `name` is not rendered.
+
+### Per-item `onPress`
+
+```jsx
+items={[
+  {id: '1', name: 'Home'},
+  {
+    id: '2',
+    name: 'Profile',
+    onPress: () => console.log('Profile pressed!'),
+  },
+]}
+```
+
+Item-level `onPress` overrides the menu-level handler.
+
+### Disabled, gap, indicator, unstyled
+
+```jsx
+<ScrollingButtonMenu
+  items={[
+    {id: '1', name: 'Home'},
+    {id: '2', name: 'Soon', disabled: true},
+    {id: '3', name: 'Settings'},
+  ]}
+  selected={selected}
+  onPress={(item) => setSelected(item.id)}
+  gap={12}
+  indicator
+  indicatorStyle={{backgroundColor: '#007AFF', height: 3}}
+  // unstyled
+/>
+```
+
+### Imperative scroll (ref)
+
+```jsx
+const menuRef = useRef(null);
+
+<ScrollingButtonMenu
+  ref={menuRef}
+  items={items}
+  selected={selected}
+  onPress={(item) => setSelected(item.id)}
+/>
+
+menuRef.current?.scrollToId('3');
+menuRef.current?.scrollToIndex(0);
+```
+
+### Custom `renderItem`
+
+```jsx
+<ScrollingButtonMenu
+  items={items}
+  selected={selected}
+  onPress={(item) => setSelected(item.id)}
+  renderItem={({item, selected}) => (
+    <Text style={{fontWeight: selected ? '700' : '400'}}>{item.name}</Text>
+  )}
+/>
+```
+
+---
+
+## API
+
+### `ScrollingButtonMenu` props
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `items` | `MenuItem[]` | — | Menu items (**required**) |
+| `onPress` | `(item) => void` | — | Item press handler |
+| `selected` | `string \| number` | — | Selected id (controlled) |
+| `upperCase` | `boolean` | `false` | Uppercase labels |
+| `selectedOpacity` | `number` | `0.7` | Press opacity |
+| `gap` | `number` | `10` | Space between items |
+| `autoCenter` | `boolean` | `true` | Center selected item |
+| `unstyled` | `boolean` | `false` | Skip built-in chip styles |
+| `indicator` | `boolean` | `false` | Sliding underline |
+| `indicatorStyle` | `ViewStyle` | — | Indicator style |
+| `renderItem` | `(info) => ReactNode` | — | Custom item renderer |
+| `containerStyle` | `ViewStyle` | — | Outer container |
+| `contentContainerStyle` | `ViewStyle` | — | Scroll content |
+| `scrollStyle` | `ViewStyle` | — | ScrollView style |
+| `textStyle` / `activeTextStyle` | `TextStyle` | — | Label styles |
+| `buttonStyle` / `activeButtonStyle` | `ViewStyle` | — | Item styles |
+| `firstButtonStyle` / `lastButtonStyle` | `ViewStyle` | — | Edge item styles |
+| `activeColor` | `string` | — | Active text color |
+| `activeBackgroundColor` | `string` | `#1e1e1e` | Active background |
+| `scrollEnabled` | `boolean` | `true` | Horizontal scroll |
+| `showsHorizontalScrollIndicator` | `boolean` | `false` | Scroll indicator |
+| `keyboardShouldPersistTaps` | `string \| boolean` | `'always'` | Keyboard taps |
+| `bounces` | `boolean` | `true` | iOS bounce |
+| `testID` / `accessibilityLabel` | `string` | — | Testing / a11y |
+
+### `MenuItem`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `id` | `string \| number` | Unique id (**required**) |
+| `name` | `string` | Label |
+| `component` | `ReactNode` | Custom content |
+| `onPress` | `(item) => void` | Per-item handler |
+| `disabled` | `boolean` | Disable item |
+| `accessibilityLabel` / `testID` | `string` | A11y / tests |
+
+### Ref (`ScrollingButtonMenu`)
+
+| Method | Description |
+|--------|-------------|
+| `scrollToId(id, animated?)` | Center by id |
+| `scrollToIndex(index, animated?)` | Center by index |
+
+### `ScrollingTabScenes` extras
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `onChange` | `(item, index) => void` | — | Selection changed |
+| `renderScene` | `(info) => ReactNode` | — | Scene renderer |
+| `scenes` | `Record<id, ReactNode>` | — | Alternate scene map |
+| `height` | `number` | *auto* | Fixed height (optional) |
+| `swipeEnabled` | `boolean` | `true` | Swipe between scenes |
+| `animation` | `'slide' \| 'fade' \| 'scale'` | `'slide'` | Transition style |
+| `sceneContainerStyle` | `ViewStyle` | — | Scene wrapper style |
+
+Ref: `goToId(id)`, `goToIndex(index)`.
 
 ---
 
 ## Thank You!
 
-We appreciate your support and feedback! If you encounter any issues, feel free to [open an issue](https://github.com/sekizlipenguen/react-native-scroll-menu/issues).
+Issues & feedback: [GitHub Issues](https://github.com/sekizlipenguen/react-native-scroll-menu/issues).

@@ -1,0 +1,7 @@
+example/
+.idea/
+.DS_Store
+*.log
+.git/
+.gitignore
+node_modules/

@@ -1,6 +1,18 @@
-# Created by .ignore support plugin (hsz.mobi)
 .idea/
 node_modules/
 .DS_Store
 yarn-error.log
 package-lock.json
+*.tsbuildinfo
+
+# capture leftovers
+assets/*-raw.mp4
+
+# example app local artifacts (source stays in git; not published to npm)
+example/node_modules/
+example/ios/Pods/
+example/ios/build/
+example/android/.gradle/
+example/android/app/build/
+example/vendor/
+example/*.log
