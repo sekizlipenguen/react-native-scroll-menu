@@ -81,7 +81,7 @@ function ScrollingTabScenesInner(props, ref) {
     (item, index) => {
       const key = toKey(item.id);
       if (lastEmittedKey.current === key) {
-        return;
+        return false;
       }
       lastEmittedKey.current = key;
 
@@ -91,6 +91,7 @@ function ScrollingTabScenesInner(props, ref) {
       if (typeof onChange === 'function') {
         onChange(item, index);
       }
+      return true;
     },
     [isControlled, onChange],
   );
@@ -139,8 +140,9 @@ function ScrollingTabScenesInner(props, ref) {
         return;
       }
 
-      skipExternalSync.current = true;
-      emitChange(item, index);
+      if (emitChange(item, index)) {
+        skipExternalSync.current = true;
+      }
       playFadeScale();
 
       if (animation === 'slide' || swipeEnabled) {
@@ -260,8 +262,9 @@ function ScrollingTabScenesInner(props, ref) {
       if (!item) {
         return;
       }
-      skipExternalSync.current = true;
-      emitChange(item, index);
+      if (emitChange(item, index)) {
+        skipExternalSync.current = true;
+      }
       playFadeScale();
     },
     [emitChange, items, pageWidth, playFadeScale],
